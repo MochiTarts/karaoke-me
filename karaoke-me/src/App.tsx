@@ -1,10 +1,13 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import { Home, Karaoke } from './pages';
+import { Navbar } from './components';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {
   return (
-    <div className="App">
+    /*<div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
@@ -19,7 +22,16 @@ function App() {
           Learn React
         </a>
       </header>
-    </div>
+    </div>*/
+    <BrowserRouter>
+      <div id="filter">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/karaoke" element={<Karaoke />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
