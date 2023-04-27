@@ -1,11 +1,41 @@
 import React from 'react';
 import './Navbar.scss';
-import { useAuth0 } from "@auth0/auth0-react";
+import { API } from "../../services";
+import { useSearchParams, Link } from 'react-router-dom';
 
 const Navbar = () => {
-  const { loginWithRedirect } = useAuth0();
-  const { logout } = useAuth0();
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const [loggedIn, setLoggedIn] = React.useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const loginHandler = (event: any) => {
+    event.preventDefault();
+    console.log(window.location.href);
+    const loginUrlPage = `${process.env.REACT_APP_BACKEND_ENDPOINT}/login`;
+    // Iterate through the search params and add them to the login url
+    searchParams.forEach((value, key) => {
+      console.log(key, value);
+      //loginUrlPage.concat(`&${key}=${value}`);
+    });
+    window.location.href = loginUrlPage;
+  };
+
+  const logoutHandler = (event: any) => {
+    event.preventDefault();
+    const logoutPage = `${process.env.REACT_APP_BACKEND_ENDPOINT}/logout`;
+    window.location.href = logoutPage;
+  };
+
+  React.useEffect(() => {
+    // Check if session cookie is set
+    API.me().then((res) => {
+      if (!res.error) {
+        setLoggedIn(true);
+      } else {
+        setLoggedIn(false);
+      }
+    })
+  }, []);
+      
 
   return (
     <nav className="navbar navbar-expand-lg fixed-top">
@@ -16,23 +46,25 @@ const Navbar = () => {
         <div className="collapse navbar-collapse justify-content-start" id="navbarNav">
           <ul className="navbar-nav">
             <li className="nav-item">
-              <a className="nav-link" aria-current="page" href="#">Create a Room</a>
+              <a className="nav-link" aria-current="page" href="/create-room">Create a Room</a>
             </li>
             <li className="nav-item">
-              <a className="nav-link" aria-current="page" href="#">Join a Room</a>
+              <a className="nav-link" aria-current="page" href="/join-room">Join a Room</a>
             </li>
           </ul>
         </div>
         <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul className="navbar-nav">
-            <li className="nav-item">
-              <a className="nav-link" aria-current="page" onClick={() => loginWithRedirect()}>
-                Login
-              </a>
-            </li>
-            {isAuthenticated && (
+            {!loggedIn && (
               <li className="nav-item">
-                <a className="nav-link" aria-current="page" onClick={() => logout({ logoutParams: { returnTo: window.location.origin } })}>
+                <a className="nav-link" aria-current="page" onClick={loginHandler}>
+                  Login
+                </a>
+              </li>
+            )}
+            {loggedIn && (
+              <li className="nav-item">
+                <a className="nav-link" aria-current="page" onClick={logoutHandler}>
                   Logout
                 </a>
               </li>

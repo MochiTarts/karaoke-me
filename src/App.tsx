@@ -1,34 +1,44 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.scss';
-import { Home, Karaoke } from './pages';
+import { Home, Karaoke, CreateRoom, JoinRoom } from './pages';
 import { Navbar } from './components';
+import { GuardedRoute } from './guards';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { API } from './services';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  React.useEffect(() => {
+    API.me().then((res) => {
+      console.log(res);
+      if (!res.error) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+    })
+  }, []);
+
   return (
-    /*<div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>*/
     <BrowserRouter>
       <div id="filter">
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/karaoke" element={<Karaoke />} />
+          <Route element={
+              <GuardedRoute auth={isAuthenticated} redirect="/" />
+            }
+          >
+            <Route path="/create-room" element={<CreateRoom />} />
+          </Route>
+          <Route element={
+              <GuardedRoute auth={isAuthenticated} redirect="/" />
+            }
+          >
+            <Route path="/join-room" element={<JoinRoom />} />
+          </Route>
         </Routes>
       </div>
     </BrowserRouter>
