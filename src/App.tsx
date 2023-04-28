@@ -6,19 +6,11 @@ import { Navbar } from './components';
 import { GuardedRoute } from './guards';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { API } from './services';
+import { useAuth0 } from "@auth0/auth0-react";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = React.useState(false);
-  React.useEffect(() => {
-    API.me().then((res) => {
-      console.log(res);
-      if (!res.error) {
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
-      }
-    })
-  }, []);
+  //const [isAuthenticated, setIsAuthenticated] = React.useState(false);
+  const { user, isAuthenticated, isLoading } = useAuth0();
 
   return (
     <BrowserRouter>

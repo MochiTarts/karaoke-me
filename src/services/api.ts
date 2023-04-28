@@ -1,4 +1,5 @@
 import { User, useAuth0 } from "@auth0/auth0-react";
+import axios from "axios";
 
 const API = () => {};
 const backend_endpoint = process.env.REACT_APP_BACKEND_ENDPOINT;
@@ -13,14 +14,14 @@ const get_youtube_audio = (url: string) => {
 
 const me = () => {
   return fetch(`${backend_endpoint}/auth/me`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-    })
-      .then((res) => res.json())
-      .catch((err) => err);
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    credentials: "include",
+  })
+    .then((res) => res.json())
+    .catch((err) => err);
 };
 
 const login = () => {
@@ -36,7 +37,7 @@ const login = () => {
 }
 
 const logout = () => {
-  return fetch(`${backend_endpoint}/api/logout`, {
+  return fetch(`${backend_endpoint}/logout`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -47,9 +48,23 @@ const logout = () => {
     .catch((err) => err);
 };
 
+const test = (token: string) => {
+  return fetch(`${backend_endpoint}/auth/me`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`
+    },
+    credentials: "include",
+  })
+    .then((res) => res.json())
+    .catch((err) => err);
+}
+
 API.get_youtube_audio = get_youtube_audio;
 API.me = me;
 API.login = login;
 API.logout = logout;
+API.test = test;
 
 export default API;

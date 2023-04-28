@@ -48,6 +48,20 @@ form {
   color: var(--bs-success);
 }
 
+.form-check {
+  margin-top: 0.5rem;
+}
+
+.form-check-input {
+  height: 1rem;
+  width: 1rem;
+  margin-top: 0.4rem;
+}
+
+.form-check-label {
+  font-size: 0.9rem !important;
+}
+
 #equalizer {
   background: url("../../../public/equalizer_clear.gif") no-repeat;
   background-position: center;

@@ -5,16 +5,51 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  padding: 0 10px;
 }
 
-.youtube-player-container {
+.youtube-player-container, .audio-player-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap: 10px;
+  width: 100%;
+  max-width: 600px;
+}
+
+.youtube-player {
+  width: 100%;
 }
 
 #audio-player.hidden {
   display: none;
+}
+
+scroll-shadow {
+  width: 100%;
+  background-color: var(--bs-indigo);
+}
+
+.lyrics-container {
+  overflow-y: scroll;
+  height: 100%;
+  max-height: 300px;
+}
+
+.lyrics-container::-webkit-scrollbar {
+  display: none;
+}
+
+.lyrics {
+  color: white;
+  font-weight: bolder;
+  font-size: larger;
+}
+
+#leave-btn {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 10px;
 }

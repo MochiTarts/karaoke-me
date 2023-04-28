@@ -9,13 +9,14 @@ const Home = (props: any) => {
 
   const handleSubmit = (event: any) => {
     event.preventDefault();
-    console.log(event);
-    // Check if YouTube URL or Video File
+    const checkGenerateKaraoke = event.target[1].checked;
+    const checkGenerateLyrics = event.target[2].checked;
+    if (checkGenerateKaraoke) localStorage.setItem("generateKaraoke", "true");
+    if (checkGenerateLyrics) localStorage.setItem("generateLyrics", "true");
+    // Check if YouTube URL or Audio File
     if (event.target[0].id === "youtube-url") {
-      console.log(event.target[0].value)
       const youtubeUrl = event.target[0].value;
       const params = new URLSearchParams(youtubeUrl.split("?")[1]);
-      console.log(params.get("v"));
       event.target[0].value = "";
       // Navigate to Karaoke page using React Router with these params: { type: "youtube", data: query string of youtubeUrl }
       navigate({
@@ -32,9 +33,9 @@ const Home = (props: any) => {
         .catch((error: any) => {
           console.log("error: " + error);
         });*/
-    } else if (event.target[0].id === "video-upload") {
-      const videoFile = event.target[0].files[0];
-      console.log(videoFile);
+    } else if (event.target[0].id === "audio-upload") {
+      const audioFile = event.target[0].files[0];
+      console.log(audioFile);
       event.target[0].value = "";
     } else {
       console.log("Error: Invalid form submission");
@@ -65,15 +66,15 @@ const Home = (props: any) => {
           <li className="nav-item" role="presentation">
             <button
               className="nav-link"
-              id="pills-video-file-tab"
+              id="pills-audio-file-tab"
               data-bs-toggle="pill"
-              data-bs-target="#pills-video-file"
+              data-bs-target="#pills-audio-file"
               type="button"
               role="tab"
-              aria-controls="pills-video-file"
+              aria-controls="pills-audio-file"
               aria-selected="false"
             >
-              Upload Video
+              Upload Audio
             </button>
           </li>
         </ul>
@@ -86,17 +87,41 @@ const Home = (props: any) => {
                   placeholder="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley"
                   required
                 />
+                <div className="form-check">
+                  <input className="form-check-input" type="checkbox" value="" id="generate-karaoke" />
+                  <label className="form-check-label" htmlFor="generate-karaoke">
+                    Generate the instrumental (karaoke) for this song
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input className="form-check-input" type="checkbox" value="" id="generate-lyrics" />
+                  <label className="form-check-label" htmlFor="generate-lyrics">
+                    Generate the lyrics for this song
+                  </label>
+                </div>
               </div>
               <button type="submit" value="Submit" className="btn btn-success">Submit</button>
               <div id="equalizer"></div>
             </form>
           </div>
 
-          <div className="tab-pane fade" id="pills-video-file" role="tabpanel" aria-labelledby="pills-video-file-tab">
+          <div className="tab-pane fade" id="pills-audio-file" role="tabpanel" aria-labelledby="pills-audio-file-tab">
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label htmlFor="video-upload" className="form-label">Upload a Video File</label>
-                <input type="file" className="form-control" id="video-upload" required/>
+                <label htmlFor="audio-upload" className="form-label">Upload a Audio File</label>
+                <input type="file" className="form-control" id="audio-upload" required/>
+                <div className="form-check">
+                  <input className="form-check-input" type="checkbox" value="" id="generate-karaoke" />
+                  <label className="form-check-label" htmlFor="generate-karaoke">
+                    Generate the instrumental (karaoke) for this song
+                  </label>
+                </div>
+                <div className="form-check">
+                  <input className="form-check-input" type="checkbox" value="" id="generate-lyrics" />
+                  <label className="form-check-label" htmlFor="generate-lyrics">
+                    Generate lyrics for this song
+                  </label>
+                </div>
               </div>
               <button type="submit" value="Submit" className="btn btn-success">Submit</button>
               <div id="equalizer"></div>

@@ -2,9 +2,13 @@ import React from 'react';
 import './Navbar.scss';
 import { API } from "../../services";
 import { useSearchParams, Link } from 'react-router-dom';
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Navbar = () => {
-  const [loggedIn, setLoggedIn] = React.useState(false);
+  const { loginWithRedirect } = useAuth0();
+  const { logout } = useAuth0();
+  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { getAccessTokenSilently } = useAuth0();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const loginHandler = (event: any) => {
@@ -24,21 +28,10 @@ const Navbar = () => {
     const logoutPage = `${process.env.REACT_APP_BACKEND_ENDPOINT}/logout`;
     window.location.href = logoutPage;
   };
-
-  React.useEffect(() => {
-    // Check if session cookie is set
-    API.me().then((res) => {
-      if (!res.error) {
-        setLoggedIn(true);
-      } else {
-        setLoggedIn(false);
-      }
-    })
-  }, []);
       
 
   return (
-    <nav className="navbar navbar-expand-lg fixed-top">
+    <nav className="navbar navbar-dark navbar-expand-lg fixed-top">
       <div className="container-fluid">
         <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span className="navbar-toggler-icon"></span>
@@ -55,16 +48,16 @@ const Navbar = () => {
         </div>
         <div className="collapse navbar-collapse justify-content-end" id="navbarNav">
           <ul className="navbar-nav">
-            {!loggedIn && (
+            {!isAuthenticated && (
               <li className="nav-item">
-                <a className="nav-link" aria-current="page" onClick={loginHandler}>
+                <a className="nav-link" aria-current="page" onClick={() => loginWithRedirect()}>
                   Login
                 </a>
               </li>
             )}
-            {loggedIn && (
+            {isAuthenticated && (
               <li className="nav-item">
-                <a className="nav-link" aria-current="page" onClick={logoutHandler}>
+                <a className="nav-link" aria-current="page" onClick={() => logout()}>
                   Logout
                 </a>
               </li>
