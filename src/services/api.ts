@@ -1,15 +1,37 @@
-import { User, useAuth0 } from "@auth0/auth0-react";
-import axios from "axios";
-
 const API = () => {};
 const backend_endpoint = process.env.REACT_APP_BACKEND_ENDPOINT;
+const aws_micro_endpoint = process.env.REACT_APP_AWS_MICRO_ENDPOINT;
+const aws_splitter_endpoint = process.env.REACT_APP_AWS_SPLITTER_ENDPOINT;
 
-const get_youtube_audio = (url: string) => {
-  console.log(backend_endpoint)
-  const query_params = new URLSearchParams({ url });
-  return fetch(`${backend_endpoint}/youtube-dl?${query_params}`)
-    .then((res) => res.blob())
+const presigned_url = (bucket: string, key: string, action: string) => {
+  const body = { bucket, key, action };
+  return fetch(`${aws_micro_endpoint}/presigned-urls`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  })
+    .then((res) => res.json())
     .catch((err) => err);
+}
+
+const get_youtube_audio = (yt_url: string) => {
+  const body = { url: yt_url };
+  return fetch(`${aws_micro_endpoint}/youtube-dl`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  })
+    .then((res) => res.json())
+    .catch((err) => err);
+};
+
+const split_audio = (s3_obj_url: string) => {
+  const body = { url: s3_obj_url };
+  // aws_splitter_endpoint is a websocket. Set up a websocket connection to it.
 };
 
 const me = () => {
@@ -66,5 +88,6 @@ API.me = me;
 API.login = login;
 API.logout = logout;
 API.test = test;
+API.presigned_url = presigned_url;
 
 export default API;

@@ -22,11 +22,43 @@
   height: fit-content;
   width: 100%;
   color: white;
-  padding: 15px 15px 0 15px;
+  padding: 15px 15px 15px 15px;
   margin: 0 10px;
   border-radius: 5px;
   background-color: var(--bs-gray-800);
   box-shadow: 0 3px 10px var(--bs-black);
+}
+
+#form-regular {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+#form-loading {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+#form-regular.hidden, #form-loading.hidden {
+  display: none;
+}
+
+.progress-bar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.progress-bar, .status-text {
+  width: 100%;
+}
+
+.status-text {
+  text-align: center;
 }
 
 .tab-content, .nav-pills {
@@ -49,7 +81,7 @@ form {
 }
 
 .form-check {
-  margin-top: 0.5rem;
+  margin: 0;
 }
 
 .form-check-input {
